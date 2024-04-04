@@ -15,7 +15,12 @@ mongoose.connect(mongoURL).then(() => {
         console.log('app is running on localhost:'+process.env.PORT);
     })
 });
-app.use(cors());//local development --WARNING---
+app.use(cors(
+    {
+        origin : "http://localhost:5173",
+        credentials : true
+    }
+));//local development --WARNING---
 app.use(express.json())
 app.use(morgan('dev'))
 app.use(cookieParser())
