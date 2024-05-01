@@ -13,7 +13,7 @@ export default function Home() {
     let location = useLocation();
     let searchQuery = new URLSearchParams(location.search);
     let page = searchQuery.get('page'); // string
-    page = parseInt(page); //int
+    page = parseInt(page) ? parseInt(page) : 1; //int
 
 
     useEffect(() => {

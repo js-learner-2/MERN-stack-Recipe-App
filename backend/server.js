@@ -6,6 +6,7 @@ const usersRoutes = require('./routes/users');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const AuthMiddleware = require('./middlewares/AuthMiddleware');
 
 const app = express();
 const mongoURL = "mongodb+srv://hlaingminthan:test1234@mern-cluster.cut3lbf.mongodb.net/?retryWrites=true&w=majority"
@@ -29,7 +30,7 @@ app.get('/', (req,res) => {
     return res.json({hello : 'world'});
 });
 
-app.use('/api/recipes',recipesRoutes)
+app.use('/api/recipes',AuthMiddleware,recipesRoutes)
 app.use('/api/users',usersRoutes)
 
 app.get('/set-cookie',(req,res) => {
