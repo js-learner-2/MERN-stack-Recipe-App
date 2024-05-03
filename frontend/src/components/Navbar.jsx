@@ -5,13 +5,13 @@ import axios from '../helpers/axios';
 
 export default function Navbar() {
 
-    let { name } = useContext(AuthContext);
+    let { user, dispatch } = useContext(AuthContext);
     let navigate = useNavigate();
-    console.log(name)
 
     let logout = async () => {
         let res = await axios.post('/api/users/logout');
         if (res.status === 200) {
+            dispatch({ type: "LOGOUT" })
             navigate('/sign-in');
         }
     }
@@ -26,9 +26,13 @@ export default function Navbar() {
                 <li><Link to="/about" className='hover:text-orange-400'>About</Link></li>
                 <li><Link to="/contact" className='hover:text-orange-400'>Contact</Link></li>
                 <li><Link to="/recipes/create" className='hover:text-orange-400'>Create Recipe</Link></li>
-                <li><Link to="/sign-in" className='hover:text-orange-400'>Login</Link></li>
-                <li><Link to="/sign-up" className='hover:text-orange-400'>Register</Link></li>
-                <li><button onClick={logout} to="/sign-up" className='hover:text-orange-400'>Logout</button></li>
+                {!user && (
+                    <>
+                        <li><Link to="/sign-in" className='hover:text-orange-400'>Login</Link></li>
+                        <li><Link to="/sign-up" className='hover:text-orange-400'>Register</Link></li>
+                    </>
+                )}
+                {!!user && (<li><button onClick={logout} to="/sign-up" className='hover:text-orange-400'>Logout</button></li>)}
             </ul>
         </nav>
     )
