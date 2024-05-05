@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const AuthMiddleware = require('./middlewares/AuthMiddleware');
 
 const app = express();
+app.use(express.static('public'))
 const mongoURL = "mongodb+srv://hlaingminthan:test1234@mern-cluster.cut3lbf.mongodb.net/?retryWrites=true&w=majority"
 mongoose.connect(mongoURL).then(() => {
     console.log('connected to db');
