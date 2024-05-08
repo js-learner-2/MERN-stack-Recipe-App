@@ -1,5 +1,6 @@
 const Recipe = require("../models/Recipe");
 const mongoose = require('mongoose');
+const removeFile = require('../helpers/removeFile');
 
 const RecipeController = {
     index : async (req,res) => {
@@ -66,6 +67,8 @@ const RecipeController = {
                 return res.status(400).json({ msg : 'not a valid id'});
             }
             let recipe = await Recipe.findByIdAndDelete(id);
+            await removeFile(__dirname+"/../public"+recipe.photo);
+
             if(!recipe) {
                 return res.status(404).json({ msg : 'recipe not found'});
             }
@@ -83,6 +86,9 @@ const RecipeController = {
             let recipe = await Recipe.findByIdAndUpdate(id, {
                 ...req.body // title : "updated title value"
             });
+
+            await removeFile(__dirname+"/../public"+recipe.photo);
+
             if(!recipe) {
                 return res.status(404).json({ msg : 'recipe not found'});
             }
