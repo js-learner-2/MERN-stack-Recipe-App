@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const AuthMiddleware = require('./middlewares/AuthMiddleware');
 const cron = require('node-cron');
 const User = require('./models/User');
+const nodemailer = require("nodemailer");
 
 const app = express();
 app.use(express.static('public'))
@@ -46,6 +47,28 @@ app.get('/set-cookie',(req,res) => {
     res.cookie('name','aungaung');
     res.cookie('important-key','value', {httpOnly : true});
     return res.send('cookie already set');
+})
+
+app.get('/send-email',async (req,res) => {
+    var transport = nodemailer.createTransport({
+        host: "sandbox.smtp.mailtrap.io",
+        port: 2525,
+        auth: {
+          user: "00d6486c058ca5",
+          pass: "5235312898201a"
+        }
+      });
+
+      const info = await transport.sendMail({
+        from: 'mgmg@gmail.com', // sender address
+        to: "hlaingminthan@gmail.com", // list of receivers
+        subject: "Hello This is email title", // Subject line
+        html: "<h1>Hello world this is email to hlaingminthan</h1>", // html body
+      });
+    
+      console.log("Message sent: %s", info.messageId);
+
+      return res.send('email already sent');
 })
 
 app.get('/get-cookie',(req,res) => {
