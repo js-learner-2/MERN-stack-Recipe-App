@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser');
 const AuthMiddleware = require('./middlewares/AuthMiddleware');
 const cron = require('node-cron');
 const User = require('./models/User');
-const nodemailer = require("nodemailer");
+const sendEmail = require('./helpers/sendEmail');
 
 const app = express();
 app.use(express.static('public'))
@@ -35,6 +35,9 @@ app.use(express.json())
 app.use(morgan('dev'))
 app.use(cookieParser())
 
+app.set('views','./views');
+app.set('view engine','ejs');
+
 app.get('/', (req,res) => {
     return res.json({hello : 'world'});
 });
@@ -49,25 +52,16 @@ app.get('/set-cookie',(req,res) => {
     return res.send('cookie already set');
 })
 
-app.get('/send-email',async (req,res) => {
-    var transport = nodemailer.createTransport({
-        host: "sandbox.smtp.mailtrap.io",
-        port: 2525,
-        auth: {
-          user: "00d6486c058ca5",
-          pass: "5235312898201a"
-        }
-      });
-
-      const info = await transport.sendMail({
-        from: 'mgmg@gmail.com', // sender address
-        to: "hlaingminthan@gmail.com", // list of receivers
-        subject: "Hello This is email title", // Subject line
-        html: "<h1>Hello world this is email to hlaingminthan</h1>", // html body
-      });
-    
-      console.log("Message sent: %s", info.messageId);
-
+app.get('/send-email', (req,res) => {
+    sendEmail({
+        view : 'email',
+        data : {
+            name : "AungAung"
+        },
+        from : "mgmg@gmail.com",
+        to : "aungaung@gmail.com",
+        subject : "Hello AungAung"
+    });
       return res.send('email already sent');
 })
 
