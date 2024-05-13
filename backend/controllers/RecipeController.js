@@ -1,6 +1,8 @@
 const Recipe = require("../models/Recipe");
 const mongoose = require('mongoose');
 const removeFile = require('../helpers/removeFile');
+const sendEmail = require("../helpers/sendEmail");
+const User = require("../models/User");
 
 const RecipeController = {
     index : async (req,res) => {
@@ -37,13 +39,31 @@ const RecipeController = {
         return res.json(response);
     },
     store : async (req,res) => {
-        const {title,description,ingredients} = req.body;
-        const recipe = await Recipe.create({
-            title,
-            description,
-            ingredients
-        });
-        return res.json(recipe);
+        try {
+            const {title,description,ingredients} = req.body;
+            const recipe = await Recipe.create({
+                title,
+                description,
+                ingredients
+            });
+            //send mails -> users -> marketing email
+            let users = await User.find(null,['email']);
+            let emails = users.map(user => user.email);
+            emails = emails.filter(email => email !=  req.user.email)
+            await sendEmail({
+                view : 'email',
+                data : {
+                    name : req.user.name,
+                    recipe
+                },
+                from : req.user.email,
+                to : emails,//[],"hlaingminthan@gmail.com"
+                subject : "New Recipe is created by someone."
+            });
+            return res.json(recipe);
+        }catch(e) {
+            return res.status(500).json({ msg :e.message});
+        }
     },
     show : async (req,res) => {
         try {

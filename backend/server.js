@@ -52,17 +52,24 @@ app.get('/set-cookie',(req,res) => {
     return res.send('cookie already set');
 })
 
-app.get('/send-email', (req,res) => {
-    sendEmail({
-        view : 'email',
-        data : {
-            name : "AungAung"
-        },
-        from : "mgmg@gmail.com",
-        to : "aungaung@gmail.com",
-        subject : "Hello AungAung"
-    });
-      return res.send('email already sent');
+app.get('/send-email',async (req,res) => {
+    try {
+        await sendEmail({
+            view : 'email',
+            data : {
+                name : "AungAung"
+            },
+            from : "mgmg@gmail.com",
+            to : "aungaung@gmail.com",
+            subject : "Hello AungAung"
+        });
+        return res.send('email already sent');
+    }catch(e){
+        return res.status(500).json({
+            message : e.message,
+            status : 500
+        })
+    }
 })
 
 app.get('/get-cookie',(req,res) => {
