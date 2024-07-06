@@ -13,7 +13,7 @@ const sendEmail = require('./helpers/sendEmail');
 
 const app = express();
 app.use(express.static('public'))
-const mongoURL = "mongodb+srv://hlaingminthan:test1234@mern-cluster.cut3lbf.mongodb.net/?retryWrites=true&w=majority"
+const mongoURL = "mongodb+srv://root:roottoor@cluster0.kxhvf7t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 mongoose.connect(mongoURL).then(() => {
     console.log('connected to db');
     app.listen(process.env.PORT,() => {
