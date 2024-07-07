@@ -27,7 +27,7 @@ mongoose.connect(mongoURL).then(() => {
 });
 app.use(cors(
     {
-        origin : "http://localhost:5173",
+        origin : ["http://localhost:5173", "http://zawmoehtike.com"],
         credentials : true
     }
 ));//local development --WARNING---
